@@ -1,0 +1,29 @@
+
+.header {  /* ✅ 正确 */
+   //  color: #fff;
+    padding:0 20px;
+    display: flex;
+    justify-content: space-between;
+      color: #fff;
+}
+
+.header-left {
+  
+}
+
+.header-right {
+ 
+  
+}
+
+.main{  
+   min-height: calc(100vh - 64px - 65px);
+   // background-color: #862c2c;
+}
+
+.footer{  
+    background-color: #f5efef !important;
+    border-top: 1px solid #a0a6a3;
+    text-align: center;
+    align-items: center;
+}

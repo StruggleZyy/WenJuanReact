@@ -1,0 +1,5 @@
+# Custom Dictionary Words
+ahooks
+craco
+fontawesome
+severice

@@ -1,0 +1,56 @@
+{
+    "data": {
+        "errno": 0,
+        "msg": "success",
+        "data": {
+            "name": "Brenda Moore",
+            "email": "a.uoefbsphui@xkqytig.tv"
+        }
+    },
+    "status": 200,
+    "statusText": "OK",
+    "headers": {
+        "access-control-allow-headers": "*",
+        "access-control-allow-methods": "*",
+        "access-control-allow-origin": "*",
+        "connection": "close",
+        "content-length": "92",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Thu, 04 Jun 2026 03:03:03 GMT",
+        "vary": "Origin, Accept-Encoding",
+        "x-powered-by": "Express"
+    },
+    "config": {
+        "transitional": {
+            "silentJSONParsing": true,
+            "forcedJSONParsing": true,
+            "clarifyTimeoutError": false,
+            "legacyInterceptorReqResOrdering": true,
+            "advertiseZstdAcceptEncoding": false
+        },
+        "adapter": [
+            "xhr",
+            "http",
+            "fetch"
+        ],
+        "transformRequest": [
+            null
+        ],
+        "transformResponse": [
+            null
+        ],
+        "timeout": 5000,
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+        "maxContentLength": -1,
+        "maxBodyLength": -1,
+        "env": {},
+        "headers": {
+            "Accept": "application/json, text/plain, */*"
+        },
+        "method": "get",
+        "url": "/api/test",
+        "allowAbsoluteUrls": true
+    },
+    "request": {}
+}

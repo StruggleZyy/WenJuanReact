@@ -11,21 +11,16 @@ import {
     message,
 } from "antd";
 import { useTitle } from "ahooks";
-import Icon, {
-    EditOutlined,
-    StarOutlined,
-    CopyOutlined,
-    DeleteOutlined,
-    BarChartOutlined,
-} from "@ant-design/icons";
+
 import type { Key } from "react";
-import ListSearch from "../../components/ListSearch";
+import ListPage from '../../components/ListPage'
+import ListSearch from '../../components/ListSearch'
 import type { TableColumnsType, TableProps } from 'antd';
 import { Spin } from 'antd';
 import { Modal } from 'antd';
 import { useRequest } from 'ahooks';
 import { getQuestionListApi } from '../../severice/question';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined,StarOutlined } from '@ant-design/icons';
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 type DataType = {
     _id: string;
@@ -134,7 +129,7 @@ const Trash: FC = () => {
                 <Button type="primary" disabled={selectedRowKeys.length === 0}>恢复</Button>
                 <Button danger disabled={selectedRowKeys.length === 0} onClick={del}>永久删除</Button>
             </Space>
-            <div className={styles.footer}>
+            <div className={styles.content}>
 
                 <Spin spinning={loading} tip="加载中...">
                     {!loading && questionList.length === 0 && <Empty description="暂无数据" />}
@@ -159,6 +154,10 @@ const Trash: FC = () => {
                 </Spin>
 
             </div>
+
+             <div className={styles.footer}>
+                {!loading  && <ListPage total={total} />}
+             </div>
         </div>
     );
 };

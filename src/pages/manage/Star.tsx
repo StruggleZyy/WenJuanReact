@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import QuestionCard from '../../components/QuestionCard';
 import ListSearch from '../../components/ListSearch';
 import styles from './common.module.scss';
 import { Typography, Modal, message, Layout, Spin } from 'antd';
-// import { getQuestionListApi } from '../../severice/question';
-import { useRequest } from 'ahooks';
+
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
+
+import ListPage from '../../components/ListPage'
+
 type StarType = {
     _id: string
     title: string
@@ -13,21 +15,20 @@ type StarType = {
     isStar: boolean
     answerCount: number
     createTime: string
+    page: number
+    pageSize: number
+    total: number
 }
 
 
 const Star: FC = () => {
     const { Title, Text } = Typography;
-
     const { data: starData, loading: starLoading } = useLoadQuestionListData({ isStar: true });
+
+ 
     const { list = [], total = 0 } = starData || {};
-    console.log('星标问卷',list);
-    
     const { Footer } = Layout;
-
-    // 只显示标星的问卷
-    //const starredQuestions = list.filter((item: StarType) => item.isStar);
-
+   
     return (
         <>
             <div className={styles.header}>
@@ -55,12 +56,15 @@ const Star: FC = () => {
                                 isStar={item.isStar}
                                 answerCount={item.answerCount}
                                 createTime={item.createTime}
+                             
                             />
                         </div>
                     ))
                 )}
             </div>
-            <div className={styles.footer}>分页</div>
+            <div className={styles.footer}>
+               <ListPage total={total}></ListPage>
+            </div>
         </>
     );
 };

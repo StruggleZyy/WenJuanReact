@@ -5,6 +5,12 @@ import { Space, Typography, Form, Input, Checkbox, Button } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { LOGIN_PATHNAME } from '../router/index';
+import { useRequest } from 'ahooks';
+import { loginService } from '../severice/user';
+import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
+import { setToken } from '../utils/user-token';
+import { MANAGE_INDEX_PATHNAME } from '../router/index';
 
 const { Title } = Typography;
 
@@ -17,6 +23,7 @@ type FieldType = {
 
 const Login: FC = () => {
     const [form] = Form.useForm();
+    const nav = useNavigate();
     const handleLocalData = (values: FieldType) => {
         localStorage.setItem('remember', 'true');
         localStorage.setItem('username', values.username || '');
@@ -29,12 +36,14 @@ const Login: FC = () => {
         localStorage.removeItem('password');
     }
     const onFinish = (values: FieldType) => {
-        console.log('Success:', values);
+
+        loginQuestion(values.username || '', values.password || '');
+
         if (values.remember) {
-            console.log('save local data');
+
             handleLocalData(values);
         } else {
-            console.log('remove local data');
+
             localStorage.setItem('remember', 'false');
             removeLocalData();
         }
@@ -42,28 +51,47 @@ const Login: FC = () => {
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
+        message.error("登录失败");
     }
+
+
+
     // 1. 组件挂载时（刷新页面时）从 localStorage 读取记住密码的状态
     // 2. 如果 remember 是 true，则设置表单的 username 和 password 字段值
     // 3. 如果 remember 是 false，则确保表单是空的
     useEffect(() => {
-      if(localStorage.getItem('remember') === 'true'){
-        form.setFieldsValue({
-          username: localStorage.getItem('username') ,
-          password: localStorage.getItem('password') ,
-          remember: true,
-        })
-      }
-      else{
-        form.setFieldsValue({
-          username: '',
-          password: '',
-          remember: false,
-        })
-      }
+        if (localStorage.getItem('remember') === 'true') {
+            form.setFieldsValue({
+                username: localStorage.getItem('username'),
+                password: localStorage.getItem('password'),
+                remember: true,
+            })
+        }
+        else {
+            form.setFieldsValue({
+                username: '',
+                password: '',
+                remember: false,
+            })
+        }
     }, []);
 
+    const { run: loginQuestion } = useRequest(
+        async (username, password) => {
+            const res = await loginService(username || '', password || '');
+            return res;
+        },
+        {
+            manual: true,
+            onSuccess: (res) => {
+                const { token='' } = res;
+                setToken(token);
+                message.success("登录成功");
+                nav(MANAGE_INDEX_PATHNAME);
+            },
+        }
 
+    )
     return (
         <div className={styles.container}>
             <div>
@@ -113,9 +141,9 @@ const Login: FC = () => {
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Form.Item wrapperCol={{ offset: 12, span: 16 }}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            Login
                         </Button>
                     </Form.Item>
                 </Form>

@@ -3,10 +3,14 @@ import { Space, Table, Typography, Form, Input, Checkbox, Button } from 'antd';
 import styles from './register.module.scss';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { registerService } from '../severice/user';
 import { LOGIN_PATHNAME } from '../router/index';
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useRequest } from 'ahooks';
+
+
 const { Title } = Typography;
-
-
 
 type FieldType = {
     username?: string;
@@ -16,16 +20,35 @@ type FieldType = {
     nickname?: string;
 };
 
+
+const Register: FC = () => {
+     const [form] = Form.useForm();
+      const nav=useNavigate();
+   
+const { run: registerQuestion } = useRequest( async (values: FieldType) => await registerService(values.username!, values.password!, values.nickname),{
+        manual: true,  // 手动触发
+       debounceWait:500,//防抖时间
+        onSuccess(res: any) {
+            message.success("注册成功");
+            // 登录成功后，跳转到登录页面
+            nav(LOGIN_PATHNAME);
+        },
+    });
+
+    
+function handleRegister(values: FieldType) {
+    registerQuestion(values);
+}
+
 const onFinish = (values: FieldType) => {
-    console.log('表单数据:', values);
+    // console.log('表单数据:', values);
+    handleRegister(values);
 }
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('表单验证失败:', errorInfo);
 }
 
-const Register: FC = () => {
-     const [form] = Form.useForm();
     return (
         <div className={styles.container}>
             <div  >
@@ -76,7 +99,7 @@ const Register: FC = () => {
                             { required: true, message: '请输入确认密码!' },
                             {
                                 validator: (rule, value) => {
-                                    console.log('确认密码:', rule);
+                                    // console.log('确认密码:', rule);
                                     // 获取密码字段的值
                                   const password = form.getFieldValue('password');
 
@@ -94,7 +117,7 @@ const Register: FC = () => {
                     <Form.Item<FieldType>
                         label="昵称"
                         name="nickname"
-                        rules={[{ required: true, message: '请输入昵称!' }]}
+                        // rules={[{ required: true, message: '请输入昵称!' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -102,7 +125,7 @@ const Register: FC = () => {
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Space>
-                            <Button type="primary" htmlType="submit">
+                            <Button type="primary" htmlType="submit" >
                                 注册
                             </Button>
                             <Link to={LOGIN_PATHNAME}>

@@ -15,13 +15,26 @@ type UpdateQuestionOption = {
   isStar: boolean
   isDeleted: boolean
 }
-// 获取问卷详情
-export async function getQuestionServiceApi(id:string):Promise<ResDataType>{
-   const url=`/api/question/${id}`
-    const data=(await axios.get(url)) as ResDataType
-    return data
+
+// 更新单个问卷
+// export async function getQuestionServiceApi(id:string):Promise<ResDataType>{
+//    const url=`/api/question/${id}`
+//     const data=(await axios.get(url)) as ResDataType
+//     return data
   
+// }
+
+
+// 更新单个问卷
+export async function getQuestionServiceApi(
+  id: string,
+  opt?: { [key: string]: any }
+): Promise<ResDataType> {
+  const url = `/api/question/${id}`
+  const data = (await axios.patch(url, opt)) as ResDataType
+  return data
 }
+
 // 创建问卷
 export async function CreateQuestionListApi():Promise<ResDataType>{
     const url=`/api/question`
@@ -49,5 +62,12 @@ export async function UpdateQuestionListApi(
 ): Promise<ResDataType> {
     const url = `/api/question/${id}`;
     const data = (await axios.patch(url, question)) as ResDataType;
+    return data;
+}
+
+// question.ts
+export async function DeleteQuestionListApi(ids: string[]): Promise<ResDataType> {
+    const url = '/api/question';
+    const data = (await axios.delete(url, { data: { ids } })) as ResDataType;
     return data;
 }

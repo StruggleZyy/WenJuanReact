@@ -7,7 +7,7 @@ function useLoadQuestionData() {
  
 
 async function load() {
-    const res = await getQuestionServiceApi(id as string);
+    const res = await getQuestionServiceApi(id);
     return res
 }
 

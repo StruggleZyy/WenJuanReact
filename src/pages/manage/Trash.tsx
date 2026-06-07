@@ -19,9 +19,11 @@ import type { TableColumnsType, TableProps } from 'antd';
 import { Spin } from 'antd';
 import { Modal } from 'antd';
 import { useRequest } from 'ahooks';
-import { getQuestionListApi } from '../../severice/question';
+import { getQuestionListApi,DeleteQuestionListApi,getQuestionServiceApi } from '../../severice/question';
 import { ExclamationCircleOutlined,StarOutlined } from '@ant-design/icons';
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
+import { idText } from "typescript";
+
 type DataType = {
     _id: string;
     title: string;
@@ -38,22 +40,51 @@ const { confirm } = Modal;
 const Trash: FC = () => {
     useTitle("小妍问卷-回收站");
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
-    const [selectedRows, setSelectedRows] = useState<string[]>([]);
-    const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true });
+    const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true });    
+    const { run: deleteQuestion } = useRequest( async (ids: string[]) => await DeleteQuestionListApi(ids),{
+        manual: true,  // 手动触发
+        // debounceWait:500,//防抖时间
+        onSuccess(res: any) {
+            message.success("删除成功");
+           
+        },
+    });
+
 
     function del() {
         confirm({
             title: "彻底删除该问卷吗？",
             okText: "确认",
-            // okType: "danger",
             content: "删除后不可恢复",
         
             onOk: () => {
                 // 确认删除选中问卷
-                setSelectedRows(selectedRowKeys);
+
+                deleteQuestion(selectedRowKeys);
+                       console.log('删除成功', selectedRowKeys);
+                       refresh();
             },
         });
     }
+
+
+   // 恢复功能
+const { run: restoreQuestion } = useRequest( 
+    async (ids: string[]) => {
+        for (const id of ids) {
+            await getQuestionServiceApi(id, { isDeleted: false });  // ✅ 传两个参数
+        }
+    },
+    { manual: true ,onSuccess(res: any) {
+        message.success("恢复成功");
+        refresh();
+    },
+    debounceWait:500,
+    }
+);
+function handleRestore() {
+    restoreQuestion(selectedRowKeys);
+}
 
     // 多层默认值保护，防止 API 返回异常数据
     const questionList: DataType[] = ((data as any)?.list || []) as DataType[];
@@ -100,15 +131,21 @@ const Trash: FC = () => {
             key: "createTime",
         },
         {
-            title: "是否删除",
-            dataIndex: "isDeleted",
-            key: "isDeleted",
-            render: (isDeleted: boolean) => (
-                <Tag color={isDeleted ? "green" : "default"}>
-                    {isDeleted ? "已删除" : "未删除"}
-                </Tag>
-            ),
+            id:"_id",
+            title:"问卷ID",
+            dataIndex:"_id",
+            key:"_id",
         }
+        // {
+        //     title: "是否删除",
+        //     dataIndex: "isDeleted",
+        //     key: "isDeleted",
+        //     render: (isDeleted: boolean) => (
+        //         <Tag color={isDeleted ? "green" : "default"}>
+        //             {isDeleted ? "已删除" : "未删除"}
+        //         </Tag>
+        //     ),
+        // }
     ];
 
     return (
@@ -126,11 +163,11 @@ const Trash: FC = () => {
             </div>
             <Divider />
             <Space style={{ marginBottom: 16 }}>
-                <Button type="primary" disabled={selectedRowKeys.length === 0}>恢复</Button>
+                <Button type="primary" disabled={selectedRowKeys.length === 0} onClick={handleRestore}>恢复</Button>
                 <Button danger disabled={selectedRowKeys.length === 0} onClick={del}>永久删除</Button>
             </Space>
             <div className={styles.content}>
-
+               
                 <Spin spinning={loading} tip="加载中...">
                     {!loading && questionList.length === 0 && <Empty description="暂无数据" />}
 

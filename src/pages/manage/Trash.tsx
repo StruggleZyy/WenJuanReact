@@ -19,7 +19,7 @@ import type { TableColumnsType, TableProps } from 'antd';
 import { Spin } from 'antd';
 import { Modal } from 'antd';
 import { useRequest } from 'ahooks';
-import { getQuestionListApi,DeleteQuestionListApi,getQuestionServiceApi } from '../../severice/question';
+import { getQuestionListApi,DeleteQuestionListApi,updateQuestionService } from '../../severice/question';
 import { ExclamationCircleOutlined,StarOutlined } from '@ant-design/icons';
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 import { idText } from "typescript";
@@ -72,7 +72,7 @@ const Trash: FC = () => {
 const { run: restoreQuestion } = useRequest( 
     async (ids: string[]) => {
         for (const id of ids) {
-            await getQuestionServiceApi(id, { isDeleted: false });  // ✅ 传两个参数
+            await updateQuestionService(id, { isDeleted: false });  // ✅ 传两个参数
         }
     },
     { manual: true ,onSuccess(res: any) {

@@ -16,17 +16,16 @@ type UpdateQuestionOption = {
   isDeleted: boolean
 }
 
-// 更新单个问卷
-// export async function getQuestionServiceApi(id:string):Promise<ResDataType>{
-//    const url=`/api/question/${id}`
-//     const data=(await axios.get(url)) as ResDataType
-//     return data
-  
-// }
+// 获取单个问卷信息
+export async function getQuestionService(id: string): Promise<ResDataType> {
+  const url = `/api/question/${id}`
+  const data = (await axios.get(url)) as ResDataType
+  return data
+}
 
 
 // 更新单个问卷
-export async function getQuestionServiceApi(
+export async function updateQuestionService(
   id: string,
   opt?: { [key: string]: any }
 ): Promise<ResDataType> {

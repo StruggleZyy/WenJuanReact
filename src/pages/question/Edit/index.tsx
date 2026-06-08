@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { getQuestionServiceApi } from "../../../severice/question";
+import { updateQuestionService } from "../../../severice/question";
 import { useParams } from "react-router-dom";
 
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";

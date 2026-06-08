@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
 import styles from "./index.module.scss";
+import EditCanvas from "./EditCanvas";
 const Edit: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
 
@@ -17,7 +18,9 @@ const Edit: FC = () => {
             <div className={styles.left}>Left</div>
             <div className={styles.main}>
                 <div className={styles["canvas-wrapper"]}>
-                    <div style={{height:'1000px'}}>测试画布测试y轴滚动</div>
+                    <div style={{height:'1000px'}}>
+                        <EditCanvas></EditCanvas>
+                    </div>
                 </div>
             </div>
             <div className={styles.right}>Right</div>

@@ -13,7 +13,10 @@ const QuestionLayout:FC=()=>{
            </div>
 
            <div className={styles.right}>
+         {/* 点击编辑 进入编辑问卷没有loading效果： 刷新页面时 会显示loading效果 
          
+         *在useLoadQuestionData中 如果没有信息 重新请求数据 ，显示loading效果 如果有信息 则不显示loading效果
+         */}
         {waitingUserData ? <div style={{textAlign:'center'}}><Spin /></div> : <Outlet />}
            </div>
 

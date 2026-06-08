@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { message } from 'antd'
+import { getToken } from '../utils/user-token'
 
 export type ResType={
 errno: number// 错误码，必填
@@ -15,12 +16,10 @@ const instance = axios.create({
   timeout: 5000,
 });
 
+//response拦截器 统一处理error 和msg
 instance.interceptors.response.use((res)=>{
     // console.log('原始数据:', JSON.stringify(res));
-    //console.log('axios实例配置:', instance.defaults);
     const resData=(res.data ||{})as ResType
-
-    
     const {errno,data,msg}=resData
     if(errno===0){
      res.data = data
@@ -31,6 +30,15 @@ instance.interceptors.response.use((res)=>{
     return Promise.reject(resData)
 })
 
-
+//request拦截器 统一添加token
+instance.interceptors.request.use((config)=>{
+    const token=getToken()
+    if(token){
+        config.headers['Authorization']=`Bearer ${token}`//JWT的固定格式
+    }
+    return config
+},(error)=>{
+    return Promise.reject(error)
+})
 
 export default instance

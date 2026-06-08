@@ -34,7 +34,7 @@ const ListPage: FC<PropsType> = (props:PropsType) => {
     const nav=useNavigate();
 
     const {pathname}=useLocation();
-    console.log('pathname',pathname);
+    // console.log('pathname',pathname);
     function handlePageChange(page:number,pageSize:number){
         searchParams.set(LIST_PAGE_PARAM_KEY,page.toString());
         searchParams.set(LIST_PAGE_SIZE_PARAM_KEY,pageSize.toString());

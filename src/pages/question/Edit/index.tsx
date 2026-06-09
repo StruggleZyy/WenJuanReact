@@ -19,7 +19,7 @@ const Edit: FC = () => {
             <div className={styles.main}>
                 <div className={styles["canvas-wrapper"]}>
                     <div style={{height:'1000px'}}>
-                        <EditCanvas></EditCanvas>
+                        <EditCanvas ></EditCanvas>
                     </div>
                 </div>
             </div>

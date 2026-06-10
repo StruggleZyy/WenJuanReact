@@ -2,4 +2,5 @@
 ahooks
 craco
 fontawesome
+selectedcomponent
 severice

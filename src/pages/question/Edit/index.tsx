@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-import { updateQuestionService } from "../../../severice/question";
-import { useParams } from "react-router-dom";
+// import { updateQuestionService } from "../../../severice/question";
+// import { useParams } from "react-router-dom";
 
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,8 @@ import { changeSelectedId } from "../../../store/componentsReducer";
 import styles from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
 import LeftPanel from "./LeftPanel";
+import RightPanel from "./RightPanel";
+
 const Edit: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
   const dispatch = useDispatch();
@@ -34,7 +36,9 @@ function ClearSelectedId(){
                     </div>
                 </div>
             </div>
-            <div className={styles.right}>Right</div>
+            <div className={styles.right}>
+              <RightPanel />
+            </div>
     
         </div>
       </div>

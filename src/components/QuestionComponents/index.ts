@@ -11,6 +11,7 @@ export type ComponentConfigType = {
     title: string;
     type: string;
     Component: FC<ComponentPropsType>; // 组件的类型
+    PropComponent: FC<ComponentPropsType>; // 组件的属性组件
     defaultProps: ComponentPropsType;
 };
 //全部的组件配置的列表

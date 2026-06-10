@@ -58,8 +58,20 @@ export const componentsSlice = createSlice({
         draft.selectedId = newComponent.fe_id;
       },
     ),
+    // 修改组件属性
+    changeComponentProps:produce((draft: ComponentsStateType, action: PayloadAction<{ fe_id: string, props: ComponentPropsType }>) => {
+      const { fe_id, props } = action.payload
+      const curComp = draft.componentList.find((c) => c.fe_id === fe_id)
+      if(curComp){
+        curComp.props ={
+          ...curComp.props,
+          ...props,
+        }
+      }
+    })
+
   },
 });
 
-export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions;
+export const { resetComponents, changeSelectedId, addComponent, changeComponentProps } = componentsSlice.actions;
 export default componentsSlice.reducer;

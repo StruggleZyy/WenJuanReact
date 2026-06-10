@@ -3,7 +3,8 @@ import { Form, Input, Select, Checkbox } from 'antd'
 import { QuestionTitlePropsType } from './interface'
 
 const PropComponent: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsType) => {
-  const { text, level, isCenter, onChange, disabled } = props
+   // ✅ props 来自父组件 ComponentProp
+  const { text, level, isCenter, onChange, disabled } = props // 子组件 接收回调函数 onChange（即 changeProps）
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -16,7 +17,9 @@ const PropComponent: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsType
 
   function handleValueChange() {
     if (onChange) {
-      onChange(form.getFieldsValue())
+      // ✅ 调用父组件传递的 onChange（即 changeProps）
+      onChange(form.getFieldsValue()) //✅ form.getFieldsValue() 获取表单所有字段的当前值
+      // console.log('表单内容变化',form.getFieldsValue())
     }
   }
 

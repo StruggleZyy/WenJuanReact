@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { changeSelectedId } from "../../../store/componentsReducer";
 import styles from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
+import LeftPanel from "./LeftPanel";
 const Edit: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
   const dispatch = useDispatch();
@@ -23,7 +24,9 @@ function ClearSelectedId(){
         <div className={styles.content}>
      
       
-            <div className={styles.left}>Left</div>
+            <div className={styles.left}>
+              <LeftPanel />
+                       </div>
             <div className={styles.main} onClick={ClearSelectedId}>
                 <div className={styles["canvas-wrapper"]}>
                     <div style={{height:'1000px'}}>

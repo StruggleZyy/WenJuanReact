@@ -15,7 +15,22 @@ export type ComponentConfigType = {
 };
 //全部的组件配置的列表
 const componentConfigList: ComponentConfigType[] = [
-    QuestionInputConfig,
+   
     QuestionTitleConfig,
+     QuestionInputConfig,
 ];
+
+// 组件分组
+export const componentConfGroup = [
+  {
+    groupId: 'textGroup',
+    groupName: '文本显示',
+    components: [QuestionTitleConfig],
+  },
+  {
+    groupId: 'inputGroup',
+    groupName: '用户输入',
+    components: [QuestionInputConfig],
+  },
+]
 export function getComponentConfByType(type: string) { return componentConfigList.find(c => c.type === type) }

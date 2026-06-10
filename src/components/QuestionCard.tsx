@@ -17,7 +17,7 @@ import { useRequest } from "ahooks";
 import { UpdateQuestionListApi } from "../severice/question";
 
 type QuestionType = {
-    _id: string;
+    _id: string; //服务端 mongodb ，自动生成，_id 不重复
     title: string;
     isPublished: boolean;
     isStar: boolean;

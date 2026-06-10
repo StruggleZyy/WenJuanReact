@@ -24,7 +24,13 @@ function useLoadQuestionData() {
     useEffect(() => {
       if(!data) return
       const {title='',componentList=[]} = data;
-      dispatch(resetComponents({ componentList }));//把componentList 存储到 Redux store中
+      //默认选中第一个组件
+     let selectedId='';
+       if(componentList.length>0){
+        selectedId=componentList[0].fe_id;
+       }
+
+      dispatch(resetComponents({ selectedId, componentList }));//把componentList 存储到 Redux store中
 
     }, [data]);
 

@@ -3,10 +3,18 @@ import { updateQuestionService } from "../../../severice/question";
 import { useParams } from "react-router-dom";
 
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
+import { useDispatch } from "react-redux";
+import { changeSelectedId } from "../../../store/componentsReducer";
 import styles from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
 const Edit: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
+  const dispatch = useDispatch();
+
+  //当没选中任何组件时，点击画布，清空选中状态 即蓝色边框去除
+function ClearSelectedId(){
+  dispatch(changeSelectedId(''));
+}
 
   return (
     <div className={styles.container}>
@@ -16,7 +24,7 @@ const Edit: FC = () => {
      
       
             <div className={styles.left}>Left</div>
-            <div className={styles.main}>
+            <div className={styles.main} onClick={ClearSelectedId}>
                 <div className={styles["canvas-wrapper"]}>
                     <div style={{height:'1000px'}}>
                         <EditCanvas ></EditCanvas>

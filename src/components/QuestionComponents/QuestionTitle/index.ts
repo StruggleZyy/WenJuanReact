@@ -1,10 +1,10 @@
 /**
  * @description 问卷 标题
- * @author 双越老师
+
  */
 
 import Component from './Component'
-// import PropComponent from './PropComponent'
+import PropComponent from './PropComponent'
 import { QuestionTitleDefaultProps } from './interface'
 
 export * from './interface'
@@ -13,7 +13,7 @@ export * from './interface'
 export default {
   title: '标题',
   type: 'questionTitle', // 要和后端统一好
-  Component,
-  // PropComponent,
+  Component,//组件
+  PropComponent,//属性组件
   defaultProps: QuestionTitleDefaultProps,
 }

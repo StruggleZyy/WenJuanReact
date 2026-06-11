@@ -15,7 +15,7 @@ const ComponentProp: FC = () => {
   const { selectedComponent } = useGetComponentInfo()
   if (!selectedComponent) return <NoProp />
 
-  const { type, props = {} } = selectedComponent
+  const { type, props = {},isLocked,isHidden  } = selectedComponent
   const componentConf = getComponentConfByType(type)
   if (!componentConf) return <NoProp />
 
@@ -33,6 +33,6 @@ const ComponentProp: FC = () => {
   }
 
   // ✅ PropComponent 是 ComponentProp 的子组件
-  return <PropComponent {...props} onChange={ChangeProps} />
+  return <PropComponent {...props} onChange={ChangeProps} disabled={isLocked||isHidden} />
 }
 export default ComponentProp

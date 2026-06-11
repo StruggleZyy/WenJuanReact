@@ -9,12 +9,12 @@ function useLoadQuestionData() {
     const { id = '' } = useParams();
     const dispatch = useDispatch();
  
-    //使用 useRequest(ajax)加载问卷数据
+   // 使用 ahooks 的 useRequest 发起 Ajax 请求
     const { data,loading,error,run } = useRequest(async(id:string)=>{
         if(!id){
            throw new Error('没有问卷');
         }
-       const data = await getQuestionService(id);
+       const data = await getQuestionService(id);// 调用后端 API
        return data;
     },{
         manual:true,
@@ -48,3 +48,5 @@ function useLoadQuestionData() {
 }
 
 export default useLoadQuestionData
+
+// componentList 的初始值是空数组，实际数据来自后端 API，通过 useLoadQuestionData hook 加载并同步到 Redux Store。

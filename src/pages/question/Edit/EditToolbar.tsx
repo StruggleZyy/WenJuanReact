@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux'
 import {
    removeSelectedComponent,
   changeComponentHidden,
-//   toggleComponentLocked,
+  toggleComponentLocked,
 //   copySelectedComponent,
 //   pasteCopiedComponent,
 //   moveComponent,
@@ -26,7 +26,11 @@ import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 const EditToolbar: FC = () => {
   const dispatch = useDispatch()
   const { selectedId, componentList, selectedComponent } = useGetComponentInfo()
-//   const { isLocked } = selectedComponent || {}
+  // console.log(`当前选中的组件是${selectedComponent?.title || selectedId}`);
+  console.log('selectedComponent',selectedComponent);
+  
+ const { isLocked } = selectedComponent || {}
+ console.log('当前组件是否锁定',isLocked);
   const length = componentList.length
   const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
   const isFirst = selectedIndex <= 0 // 第一个
@@ -39,13 +43,12 @@ const EditToolbar: FC = () => {
 
 //   // 隐藏组件
   function handleHidden() {
-    console.log('点击了隐藏按钮');
     dispatch(changeComponentHidden({ fe_id: selectedId, isHidden: true }))
-  }
+  } 
 
 //   // 锁定组件
    function handleLock() {
-//     dispatch(toggleComponentLocked({ fe_id: selectedId }))
+   dispatch(toggleComponentLocked({ fe_id: selectedId }))
   }
 
 //   // 复制
@@ -93,7 +96,7 @@ const EditToolbar: FC = () => {
           shape="circle"
           icon={<LockOutlined />}
           onClick={handleLock}
-        //   type={isLocked ? 'primary' : 'default'}
+         type={isLocked ? 'primary' : 'default'}
         ></Button>
       </Tooltip>
       <Tooltip title="复制">

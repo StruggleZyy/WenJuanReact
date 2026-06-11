@@ -9,6 +9,7 @@ export type ComponentInfoType = {
   title: string;
   props: ComponentPropsType;
   isHidden?: boolean;
+  isLocked?: boolean;
 };
 
 export type ComponentsStateType = {
@@ -19,7 +20,7 @@ export type ComponentsStateType = {
 const INIT_STATE: ComponentsStateType = {
   selectedId: "",
   //组件列表
-  componentList: [],
+  componentList: [], // 初始为空数组
 };
 
 export const componentsSlice = createSlice({
@@ -101,27 +102,42 @@ export const componentsSlice = createSlice({
       ) => {
         const { fe_id, isHidden } = action.payload;
         const { componentList } = draft;
-       
+
         const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
         // console.log("fe_id", fe_id, "curComp", curComp);
         if (curComp) {
           curComp.isHidden = isHidden;
         }
 
-       
-       // 重新计算 selectedId
-    let newSelectedId = ''
+        // 重新计算 selectedId
+        let newSelectedId = "";
 
-    if (isHidden) {
-      // 要隐藏
-      newSelectedId = getNewSelectedId(componentList, fe_id)
-    } else {
-      // 要显示
-      newSelectedId = fe_id
-    }
+        if (isHidden) {
+          // 要隐藏
+          newSelectedId = getNewSelectedId(componentList, fe_id);
+        } else {
+          // 要显示
+          newSelectedId = fe_id;
+        }
 
-    draft.selectedId = newSelectedId
+        draft.selectedId = newSelectedId;
         //
+      },
+    ),
+    // 锁定/解锁组件（切换状态）
+    toggleComponentLocked: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string }>,
+      ) => {
+        const { fe_id } = action.payload;
+
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          // 处理 undefined 情况，默认视为 false
+          curComp.isLocked = !(curComp.isLocked ?? false);
+          console.log("修改后 isLocked:", curComp.isLocked);
+        }
       },
     ),
   },
@@ -134,5 +150,6 @@ export const {
   changeComponentProps,
   removeSelectedComponent,
   changeComponentHidden,
+  toggleComponentLocked,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

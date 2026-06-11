@@ -19,7 +19,7 @@ function ComponentItem(c: ComponentConfigType) {
             fe_id: nanoid(),
             title,
             type,
-            props: defaultProps,
+            props: { ...defaultProps }, // 创建 defaultProps 的浅拷贝，避免引用共享
         }));
     };
     

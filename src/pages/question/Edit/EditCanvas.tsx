@@ -22,7 +22,7 @@ const EditCanvas: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
   const { componentList,selectedId } = useGetComponentInfo();
 
-  // console.log("componentList", componentList);
+
   const dispatch = useDispatch();
 
   function handleClick(event:React.MouseEvent,id:string){
@@ -38,7 +38,9 @@ const EditCanvas: FC = () => {
 
   return (
     <div className={styles.canvas}>
-      {componentList.map((item) => {
+      {componentList.filter((item) => !item.isHidden).map((item) => {
+     
+        
         const { fe_id } = item;
 
         const wrapperDefaultClassName = styles["component-wrapper"];

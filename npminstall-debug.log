@@ -1,5 +1,5 @@
 {
-  root: 'C:\\Users\\zhangyan\\Desktop\\readyall\\wenjuan-fn',
+  root: 'A:\\react-低代码平台-文件\\wenjuan-fn\\wenjuan-fn',
   registry: 'https://registry.npmmirror.com',
   pkgs: [],
   production: false,
@@ -48,8 +48,8 @@
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
     npm_config_gl_binary_host: 'https://cdn.npmmirror.com/binaries/gl',
     RIPGREP_PREBUILT_BINARIES_MIRROR: 'https://registry.npmmirror.com/-/binary/ripgrep-prebuilt',
-    npm_rootpath: 'C:\\Users\\zhangyan\\Desktop\\readyall\\wenjuan-fn',
-    INIT_CWD: 'C:\\Users\\zhangyan\\Desktop\\readyall\\wenjuan-fn'
+    npm_rootpath: 'A:\\react-低代码平台-文件\\wenjuan-fn\\wenjuan-fn',
+    INIT_CWD: 'A:\\react-低代码平台-文件\\wenjuan-fn\\wenjuan-fn'
   },
   binaryMirrors: {
     ENVS: {
@@ -194,7 +194,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: 'C:\\Users\\zhangyan\\Desktop\\readyall\\wenjuan-fn',
+  workspaceRoot: 'A:\\react-低代码平台-文件\\wenjuan-fn\\wenjuan-fn',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,

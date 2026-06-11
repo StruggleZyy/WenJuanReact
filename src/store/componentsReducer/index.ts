@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "../../components/QuestionComponents";
 import { resetWarned } from "antd/es/_util/warning";
 import { produce } from "immer";
+import { getNewSelectedId } from "./utils";
 export type ComponentInfoType = {
   fe_id: string; // 前端生成的 id ，服务端 Mongodb 不认这种格式，所以自定义一个 fe_id
   type: string;
   title: string;
   props: ComponentPropsType;
+  isHidden?: boolean;
 };
 
 export type ComponentsStateType = {
@@ -59,19 +61,78 @@ export const componentsSlice = createSlice({
       },
     ),
     // 修改组件属性
-    changeComponentProps:produce((draft: ComponentsStateType, action: PayloadAction<{ fe_id: string, props: ComponentPropsType }>) => {
-      const { fe_id, props } = action.payload
-      const curComp = draft.componentList.find((c) => c.fe_id === fe_id)
-      if(curComp){
-        curComp.props ={
-          ...curComp.props,
-          ...props,
+    changeComponentProps: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string; props: ComponentPropsType }>,
+      ) => {
+        const { fe_id, props } = action.payload;
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.props = {
+            ...curComp.props,
+            ...props,
+          };
         }
-      }
-    })
+      },
+    ),
 
+    // 删除选中的组件
+    removeSelectedComponent: produce(
+      (draft: ComponentsStateType, _action: PayloadAction) => {
+        const { componentList, selectedId: removedId } = draft;
+        const index = componentList.findIndex((c) => c.fe_id === removedId);
+
+        // 如果没找到要删除的组件，直接返回
+        if (index < 0) return;
+
+        // 删除组件
+        componentList.splice(index, 1);
+
+        // 获取新的选中组件ID（调用工具函数）
+        draft.selectedId = getNewSelectedId(componentList, removedId);
+      },
+    ),
+    // 隐藏/显示组件
+    changeComponentHidden: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string; isHidden: boolean }>,
+      ) => {
+        const { fe_id, isHidden } = action.payload;
+        const { componentList } = draft;
+       
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        // console.log("fe_id", fe_id, "curComp", curComp);
+        if (curComp) {
+          curComp.isHidden = isHidden;
+        }
+
+       
+       // 重新计算 selectedId
+    let newSelectedId = ''
+
+    if (isHidden) {
+      // 要隐藏
+      newSelectedId = getNewSelectedId(componentList, fe_id)
+    } else {
+      // 要显示
+      newSelectedId = fe_id
+    }
+
+    draft.selectedId = newSelectedId
+        //
+      },
+    ),
   },
 });
 
-export const { resetComponents, changeSelectedId, addComponent, changeComponentProps } = componentsSlice.actions;
+export const {
+  resetComponents,
+  changeSelectedId,
+  addComponent,
+  changeComponentProps,
+  removeSelectedComponent,
+  changeComponentHidden,
+} = componentsSlice.actions;
 export default componentsSlice.reducer;

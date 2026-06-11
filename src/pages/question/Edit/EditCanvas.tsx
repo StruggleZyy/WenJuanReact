@@ -39,16 +39,16 @@ const EditCanvas: FC = () => {
   return (
     <div className={styles.canvas}>
       {componentList.filter((item) => !item.isHidden).map((item) => {
-     
-        
+  
         const { fe_id,isLocked } = item;
 
         const wrapperDefaultClassName = styles["component-wrapper"];
         const selectedClassName = styles.selected;
 
-        //
+        // // 锁定组件样式
          const lockedClassName = styles.locked;
-         // 锁定组件样式
+        //复制组件样式
+        const copiedClassName = styles.copied
         const wrapperClassName = classNames(wrapperDefaultClassName, {
           [selectedClassName]: selectedId === fe_id,
             [lockedClassName]: isLocked,

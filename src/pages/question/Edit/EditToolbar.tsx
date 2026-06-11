@@ -17,20 +17,20 @@ import {
    removeSelectedComponent,
   changeComponentHidden,
   toggleComponentLocked,
-//   copySelectedComponent,
-//   pasteCopiedComponent,
+ copySelectedComponent,
+  pasteCopiedComponent,
 //   moveComponent,
  } from '../../../store/componentsReducer'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 
 const EditToolbar: FC = () => {
   const dispatch = useDispatch()
-  const { selectedId, componentList, selectedComponent } = useGetComponentInfo()
-  // console.log(`当前选中的组件是${selectedComponent?.title || selectedId}`);
-  console.log('selectedComponent',selectedComponent);
+  const { selectedId, componentList, selectedComponent, copiedComponent } = useGetComponentInfo()
+
+  // console.log('selectedComponent',selectedComponent);
   
  const { isLocked } = selectedComponent || {}
- console.log('当前组件是否锁定',isLocked);
+//  console.log('当前组件是否锁定',isLocked);
   const length = componentList.length
   const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
   const isFirst = selectedIndex <= 0 // 第一个
@@ -51,14 +51,14 @@ const EditToolbar: FC = () => {
    dispatch(toggleComponentLocked({ fe_id: selectedId }))
   }
 
-//   // 复制
+//   // 复制组件
   function copy() {
-//     dispatch(copySelectedComponent())
+    dispatch(copySelectedComponent())
    }
 
 //   // 粘贴
   function paste() {
-//     dispatch(pasteCopiedComponent())
+   dispatch(pasteCopiedComponent())
   }
 
 //   // 上移 
@@ -107,7 +107,7 @@ const EditToolbar: FC = () => {
           shape="circle"
           icon={<BlockOutlined />}
           onClick={paste}
-        //   disabled={copiedComponent == null}
+          disabled={copiedComponent == null}
         ></Button>
       </Tooltip>
       <Tooltip title="上移">

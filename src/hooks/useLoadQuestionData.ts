@@ -30,7 +30,7 @@ function useLoadQuestionData() {
         selectedId=componentList[0].fe_id;
        }
 
-      dispatch(resetComponents({ selectedId, componentList }));//把componentList 存储到 Redux store中
+      dispatch(resetComponents({ selectedId, componentList,copiedComponent:null }));//把componentList 存储到 Redux store中
 
     }, [data]);
 

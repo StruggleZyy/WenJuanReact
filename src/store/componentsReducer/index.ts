@@ -2,7 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "../../components/QuestionComponents";
 import { resetWarned } from "antd/es/_util/warning";
 import { produce } from "immer";
-import { getNewSelectedId } from "./utils";
+import { getNewSelectedId, insertNewComponent } from "./utils";
+import cloneDeep from 'lodash.clonedeep'; 
+import { nanoid } from 'nanoid';
+
 export type ComponentInfoType = {
   fe_id: string; // 前端生成的 id ，服务端 Mongodb 不认这种格式，所以自定义一个 fe_id
   type: string;
@@ -15,12 +18,15 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string;
   componentList: Array<ComponentInfoType>;
+    //复制的组件列表
+  copiedComponent: ComponentInfoType | null,
 };
 
 const INIT_STATE: ComponentsStateType = {
   selectedId: "",
   //组件列表
   componentList: [], // 初始为空数组
+copiedComponent:null,
 };
 
 export const componentsSlice = createSlice({
@@ -49,16 +55,17 @@ export const componentsSlice = createSlice({
       ) => {
         const newComponent = action.payload;
 
-        const { selectedId, componentList } = draft;
-        const index = componentList.findIndex((c) => c.fe_id === selectedId);
-        if (index < 0) {
-          // 未选中任何组件
-          draft.componentList.push(newComponent);
-        } else {
-          // 选中了组件，插入到 index 后面
-          draft.componentList.splice(index + 1, 0, newComponent);
-        }
-        draft.selectedId = newComponent.fe_id;
+        // const { selectedId, componentList } = draft;
+        // const index = componentList.findIndex((c) => c.fe_id === selectedId);
+        // if (index < 0) {
+        //   // 未选中任何组件
+        //   draft.componentList.push(newComponent);
+        // } else {
+        //   // 选中了组件，插入到 index 后面
+        //   draft.componentList.splice(index + 1, 0, newComponent);
+        // }
+        // draft.selectedId = newComponent.fe_id;
+        insertNewComponent(draft, newComponent);
       },
     ),
     // 修改组件属性
@@ -140,6 +147,30 @@ export const componentsSlice = createSlice({
         }
       },
     ),
+    // 复制组件
+    copySelectedComponent:produce((draft:ComponentsStateType,_action:PayloadAction)=>{
+      const {selectedId,componentList} = draft;
+      const selectedComponent = componentList.find((c) => c.fe_id === selectedId);
+     
+      if(selectedComponent){
+        draft.copiedComponent = cloneDeep(selectedComponent);
+        console.log("复制组件");
+      }
+    }),
+    // 粘贴组件
+    pasteCopiedComponent:produce((draft:ComponentsStateType,_action:PayloadAction)=>{
+      const {copiedComponent} = draft;
+     
+      if(copiedComponent==null) return;
+      // ✅ 创建新对象，保留原 copiedComponent
+  const newComponent: ComponentInfoType = {
+    ...copiedComponent,
+    fe_id: `fe-${nanoid(10)}`,  // 带前缀的唯一 ID
+    isLocked: false,             // 粘贴后默认解锁
+    isHidden: false,             // 粘贴后默认显示
+  };
+      insertNewComponent(draft, newComponent);
+    }),
   },
 });
 
@@ -151,5 +182,7 @@ export const {
   removeSelectedComponent,
   changeComponentHidden,
   toggleComponentLocked,
+  copySelectedComponent,
+  pasteCopiedComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

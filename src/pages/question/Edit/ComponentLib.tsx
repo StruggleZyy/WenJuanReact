@@ -26,7 +26,7 @@ function ComponentItem(c: ComponentConfigType) {
     return (
         <div key={type} className={styles.wrapper}>
             <div className={styles.component} onClick={handleClick}>
-                <Component />
+                <Component  />
             </div>
         </div>
     );
@@ -37,7 +37,7 @@ const ComponentLib: FC = () => {
         <div>
             {componentConfGroup.map((item, index) => {
                 const { groupId, groupName, components } = item;
-                // console.log("components", components);
+            //   console.log("components", components);
                 return (
                     <div key={groupId}>
                         <Title

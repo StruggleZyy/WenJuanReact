@@ -81,7 +81,7 @@ export const componentsSlice = createSlice({
           curComp.props = {
             ...curComp.props,
             ...props,
-          };
+          }as ComponentPropsType;
         }
       },
     ),

@@ -8,7 +8,7 @@ import { Spin } from "antd";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 import { ComponentConfigType } from "../../../components/QuestionComponents/index";
 import { getComponentConfByType } from "../../../components/QuestionComponents/index";
-import { ComponentInfoType,changeSelectedId } from "../../../store/componentsReducer";
+import { ComponentInfoType, changeSelectedId } from "../../../store/componentsReducer";
 import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
 import { useDispatch } from "react-redux";
 import classNames from 'classnames';
@@ -21,18 +21,18 @@ function genComponent(componentInfo: ComponentInfoType) {
 }
 const EditCanvas: FC = () => {
   const { loading, data, error } = useLoadQuestionData();
-  const { componentList,selectedId } = useGetComponentInfo();
+  const { componentList, selectedId } = useGetComponentInfo();
 
 
   const dispatch = useDispatch();
 
-  function handleClick(event:React.MouseEvent,id:string){
+  function handleClick(event: React.MouseEvent, id: string) {
     event.stopPropagation();
     dispatch(changeSelectedId(id));
-    
+
   }
-// 绑定快捷键
-useBindCanvasKeyPress()//直接调用，无需返回值
+  // 绑定快捷键
+  useBindCanvasKeyPress()//直接调用，无需返回值
 
   if (loading) {
     return <Spin></Spin>;
@@ -41,23 +41,24 @@ useBindCanvasKeyPress()//直接调用，无需返回值
   return (
     <div className={styles.canvas}>
       {componentList.filter((item) => !item.isHidden).map((item) => {
-  
-        const { fe_id,isLocked } = item;
+
+
+        const { fe_id, isLocked } = item;
 
         const wrapperDefaultClassName = styles["component-wrapper"];
         const selectedClassName = styles.selected;
 
         // // 锁定组件样式
-         const lockedClassName = styles.locked;
+        const lockedClassName = styles.locked;
         //复制组件样式
         const copiedClassName = styles.copied
         const wrapperClassName = classNames(wrapperDefaultClassName, {
           [selectedClassName]: selectedId === fe_id,
-            [lockedClassName]: isLocked,
-          
+          [lockedClassName]: isLocked,
+
         });
         return (
-          <div key={fe_id} className={wrapperClassName} onClick={(event)=>handleClick(event,fe_id)}>
+          <div key={fe_id} className={wrapperClassName} onClick={(event) => handleClick(event, fe_id)}>
             <div className={styles.component}>{genComponent(item)}</div>
           </div>
         );

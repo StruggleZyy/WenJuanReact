@@ -19,15 +19,13 @@ import {
   toggleComponentLocked,
  copySelectedComponent,
   pasteCopiedComponent,
-//   moveComponent,
+   moveComponent,
  } from '../../../store/componentsReducer'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 
 const EditToolbar: FC = () => {
   const dispatch = useDispatch()
   const { selectedId, componentList, selectedComponent, copiedComponent } = useGetComponentInfo()
-
-  // console.log('selectedComponent',selectedComponent);
   
  const { isLocked } = selectedComponent || {}
 //  console.log('当前组件是否锁定',isLocked);
@@ -63,14 +61,14 @@ const EditToolbar: FC = () => {
 
 //   // 上移 
   function moveUp() {
-//     if (isFirst) return
-   // dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex - 1 })) 
+    if (isFirst) return
+   dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex - 1 })) 
     }
 
 //   // 下移
   function moveDown() {
-//     if (isLast) return
-//     dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex + 1 }))
+    if (isLast) return
+    dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex + 1 }))
    }
 
 //   // 撤销

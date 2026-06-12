@@ -3,8 +3,9 @@ import { ComponentPropsType } from "../../components/QuestionComponents";
 import { resetWarned } from "antd/es/_util/warning";
 import { produce } from "immer";
 import { getNewSelectedId, insertNewComponent } from "./utils";
-import cloneDeep from 'lodash.clonedeep'; 
-import { nanoid } from 'nanoid';
+import cloneDeep from "lodash.clonedeep";
+import { nanoid } from "nanoid";
+import { arrayMove } from '@dnd-kit/sortable'
 
 export type ComponentInfoType = {
   fe_id: string; // 前端生成的 id ，服务端 Mongodb 不认这种格式，所以自定义一个 fe_id
@@ -18,15 +19,15 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string;
   componentList: Array<ComponentInfoType>;
-    //复制的组件列表
-  copiedComponent: ComponentInfoType | null,
+  //复制的组件列表
+  copiedComponent: ComponentInfoType | null;
 };
 
 const INIT_STATE: ComponentsStateType = {
   selectedId: "",
   //组件列表
   componentList: [], // 初始为空数组
-copiedComponent:null,
+  copiedComponent: null,
 };
 
 export const componentsSlice = createSlice({
@@ -148,29 +149,78 @@ export const componentsSlice = createSlice({
       },
     ),
     // 复制组件
-    copySelectedComponent:produce((draft:ComponentsStateType,_action:PayloadAction)=>{
-      const {selectedId,componentList} = draft;
-      const selectedComponent = componentList.find((c) => c.fe_id === selectedId);
-     
-      if(selectedComponent){
-        draft.copiedComponent = cloneDeep(selectedComponent);
-        console.log("复制组件");
-      }
-    }),
+    copySelectedComponent: produce(
+      (draft: ComponentsStateType, _action: PayloadAction) => {
+        const { selectedId, componentList } = draft;
+        const selectedComponent = componentList.find(
+          (c) => c.fe_id === selectedId,
+        );
+
+        if (selectedComponent) {
+          draft.copiedComponent = cloneDeep(selectedComponent);
+          console.log("复制组件");
+        }
+      },
+    ),
     // 粘贴组件
-    pasteCopiedComponent:produce((draft:ComponentsStateType,_action:PayloadAction)=>{
-      const {copiedComponent} = draft;
-     
-      if(copiedComponent==null) return;
-      // ✅ 创建新对象，保留原 copiedComponent
-  const newComponent: ComponentInfoType = {
-    ...copiedComponent,
-    fe_id: `fe-${nanoid(10)}`,  // 带前缀的唯一 ID
-    isLocked: false,             // 粘贴后默认解锁
-    isHidden: false,             // 粘贴后默认显示
-  };
-      insertNewComponent(draft, newComponent);
+    pasteCopiedComponent: produce(
+      (draft: ComponentsStateType, _action: PayloadAction) => {
+        const { copiedComponent } = draft;
+
+        if (copiedComponent == null) return;
+        // ✅ 创建新对象，保留原 copiedComponent
+        const newComponent: ComponentInfoType = {
+          ...copiedComponent,
+          fe_id: `fe-${nanoid(10)}`, // 带前缀的唯一 ID
+          isLocked: false, // 粘贴后默认解锁
+          isHidden: false, // 粘贴后默认显示
+        };
+        insertNewComponent(draft, newComponent);
+      },
+    ),
+     // 选中上一个
+    selectPrevComponent: produce((draft: ComponentsStateType, _action: PayloadAction<void>) => {
+      const { selectedId, componentList } = draft
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex <= 0) return // 已经选中了第一个，无法在向上选中
+
+      draft.selectedId = componentList[selectedIndex - 1].fe_id
     }),
+
+    // 选中下一个
+    selectNextComponent: produce((draft: ComponentsStateType, _action: PayloadAction<void>) => {
+      const { selectedId, componentList } = draft
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex + 1 === componentList.length) return // 已经选中了最后一个，无法再向下选中
+
+      draft.selectedId = componentList[selectedIndex + 1].fe_id
+    }),
+
+    // 修改组件标题
+    changeComponentTitle: produce(
+      (draft: ComponentsStateType, action: PayloadAction<{ fe_id: string; title: string }>) => {
+        const { title, fe_id } = action.payload
+        const curComp = draft.componentList.find(c => c.fe_id === fe_id)
+        if (curComp) curComp.title = title
+      }
+    ),
+
+    // 移动组件位置
+    moveComponent: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ oldIndex: number; newIndex: number }>
+      ) => {
+        const { componentList: curComponentList } = draft
+        const { oldIndex, newIndex } = action.payload
+
+        draft.componentList = arrayMove(curComponentList, oldIndex, newIndex)
+      }
+    ),
   },
 });
 
@@ -184,5 +234,8 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
+   moveComponent
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

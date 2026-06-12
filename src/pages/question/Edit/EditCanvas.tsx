@@ -9,6 +9,7 @@ import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 import { ComponentConfigType } from "../../../components/QuestionComponents/index";
 import { getComponentConfByType } from "../../../components/QuestionComponents/index";
 import { ComponentInfoType,changeSelectedId } from "../../../store/componentsReducer";
+import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
 import { useDispatch } from "react-redux";
 import classNames from 'classnames';
 function genComponent(componentInfo: ComponentInfoType) {
@@ -30,7 +31,8 @@ const EditCanvas: FC = () => {
     dispatch(changeSelectedId(id));
     
   }
-
+// 绑定快捷键
+useBindCanvasKeyPress()//直接调用，无需返回值
 
   if (loading) {
     return <Spin></Spin>;

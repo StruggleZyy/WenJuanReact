@@ -5,13 +5,14 @@ import { QuestionRadioPropsType, QuestionRadioDefaultProps } from './interface'
 
 
 const Component: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType) => {
-  const { title, isVertical, options = [], value = '' } = { ...QuestionRadioDefaultProps, ...props }
+  const { title, isVertical, options = [], value = '',disabled } = { ...QuestionRadioDefaultProps, ...props }
 
  return (
     <div>
       <div>{title}</div>
       <Radio.Group
         value={value}
+        disabled={disabled}
         style={{
           display: isVertical ? 'block' : 'flex',
           flexDirection: isVertical ? 'column' : 'row',

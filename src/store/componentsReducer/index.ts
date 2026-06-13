@@ -236,6 +236,7 @@ export const {
   pasteCopiedComponent,
   selectPrevComponent,
   selectNextComponent,
-   moveComponent
+   moveComponent,
+   changeComponentTitle,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

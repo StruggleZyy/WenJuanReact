@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react";
 import { Form, Radio, Input } from 'antd';
 import { QuestionRadioPropsType } from './interface'
 const PropComponent: FC<QuestionRadioPropsType> = (props) => {
-  const { title, isVertical, options = [], value, onChange } = props
+  const { title, isVertical, options = [], value, onChange,disabled } = props
   const [form] = Form.useForm()
   useEffect(() => {
     form.setFieldsValue({
@@ -35,6 +35,7 @@ const PropComponent: FC<QuestionRadioPropsType> = (props) => {
 
       <Form.Item label="选项" name="value" rules={[{ required: true, message: '请添加选项' }]}>
         <Radio.Group
+          disabled={disabled}
           options={options.map((item) => ({
             value: item.value,
             label: item.text,

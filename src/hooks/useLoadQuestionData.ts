@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useRequest } from 'ahooks';
 import { getQuestionService } from '../severice/question';
 import { useDispatch } from 'react-redux';
+import { resetPageInfo } from '../store/pageInfoReducer';
 import { resetComponents } from '../store/componentsReducer';
 function useLoadQuestionData() {
     const { id = '' } = useParams();
@@ -23,7 +24,7 @@ function useLoadQuestionData() {
     //加载成功后，将问卷数据存储到 redux 中
     useEffect(() => {
       if(!data) return
-      const {title='',componentList=[]} = data;
+      const {title='',componentList=[],desc='',js='',css=''} = data;
       //默认选中第一个组件
      let selectedId='';
        if(componentList.length>0){
@@ -31,7 +32,7 @@ function useLoadQuestionData() {
        }
 
       dispatch(resetComponents({ selectedId, componentList,copiedComponent:null }));//把componentList 存储到 Redux store中
-
+      dispatch(resetPageInfo({title,desc,js,css}));//把title 存储到 Redux store中
     }, [data]);
 
 
